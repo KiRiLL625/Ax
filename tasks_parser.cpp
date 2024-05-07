@@ -8,23 +8,21 @@
 
 namespace ax {
     tasks_parser::tasks_parser(std::string path): path(std::move(path)) {}
-    //мб быстрее можно
+
     void tasks_parser::parse_files() {
         for (const auto & entry : std::filesystem::directory_iterator(path)) {
             if (entry.path().extension() == ".md") {
-                tasks.insert({entry.path().filename().string(), ""});
-            }
-        }
-        //не слишком ли долго?
-        for (const auto & entry : std::filesystem::directory_iterator(path)) {
-            if (entry.path().extension() == ".cpp" || entry.path().extension() == ".cxx") {
-                std::string filename = entry.path().filename().replace_extension().string();
-                auto it = std::find_if(tasks.begin(), tasks.end(), [filename](const std::pair<std::string, std::string> & p) {
-                    return p.first == filename + ".md";
+                const auto & it = std::find_if(
+                    std::filesystem::directory_iterator(path),
+                    std::filesystem::directory_iterator(),
+                    [entry](const std::filesystem::directory_entry & e) {
+                        return (e.path().extension() == ".cpp" || e.path().extension() == ".cxx")
+                        && e.path().filename().replace_extension().string() ==
+                        entry.path().filename().replace_extension().string();
                 });
-                if (it != tasks.end()) {
-                    it->second = entry.path().filename().string();
-                }
+                tasks.insert({entry.path().filename().string(),
+                              it != std::filesystem::directory_iterator() ?
+                              it->path().filename().string() : ""});
             }
         }
     }

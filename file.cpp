@@ -10,8 +10,8 @@ namespace ax {
 
     file::file(int type, std::string file_name, std::string download_url, int status,
                int visibility, std::string path): type(type), file_name(std::move(file_name)),
-               download_url(std::move(download_url)), full_text(parse_file()),
-               status(status), visibility(visibility), path(path) {}
+               download_url(std::move(download_url)),
+               status(status), visibility(visibility), path(path) {this->full_text = parse_file();}
 
     void file::add_query_file() {
         pqxx::connection c("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
@@ -26,6 +26,7 @@ namespace ax {
 
     std::string file::parse_file() {
         std::ifstream file(std::filesystem::path(path) / file_name);
+        //std::ifstream file(file_name);
         //как и в task.cpp, работает только с относительным путем
         std::string file_content;
         if (file.is_open()) {

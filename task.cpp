@@ -11,8 +11,8 @@
 namespace ax {
     task::task(int page_id, int type, std::string title,
                std::string max_mark, int status, std::string path) : page_id(page_id), type(type),
-               title(std::move(title.substr(0, title.size() - 3))), description(parse_task()),
-                max_mark(std::move(max_mark)), status(status), path(path) {}
+               title(std::move(title.substr(0, title.size() - 3))),
+                max_mark(std::move(max_mark)), status(status), path(path) { description = parse_task();}
 
     void task::add_query_task() {
         pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
@@ -42,7 +42,7 @@ namespace ax {
 
     std::string task::parse_task() {
         std::ifstream file(std::filesystem::path(path) / (title + ".md")); //todo: сделать абсолютный путь
-        //std::ifstream file(title + ".md"); работает и считывает содержимое файла, но только если в clion указать текущую директорию как рабочую
+        //std::ifstream file(title + ".md"); //работает и считывает содержимое файла, но только если в clion указать текущую директорию как рабочую
         std::string file_content;
         if (file.is_open()) {
             std::string line;
