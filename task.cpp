@@ -18,18 +18,12 @@ namespace ax {
         pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
         pqxx::work txn(conn);
 
-        std::string query = "INSERT INTO ax_task VALUES(DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING id";
-        pqxx::result r = txn.parameterized(query)
-                            (page_id)
-                            (type)
-                            (title)
-                            (description)
-                            (max_mark)
-                            (status)
-                            .exec();
+        pqxx::result r = txn.exec("INSERT INTO ax_task VALUES (DEFAULT, " + txn.quote(page_id) + ", " + txn.quote(type) +
+                                  ", " + txn.quote(title) + ", " + txn.quote(description) + ", " + txn.quote(max_mark) +
+                                  ", " + txn.quote(status) + ") RETURNING id");
         this->id = r[0][0].as<int>();
         txn.commit();
-        conn.disconnect();
+        //conn.disconnect();
     }
 
     void task::add_file(const file& f) const {
@@ -37,12 +31,11 @@ namespace ax {
         pqxx::work txn(conn);
         txn.exec("INSERT INTO ax_task_files VALUES (DEFAULT, " + txn.quote(id) + ", " + txn.quote(f.get_id()) + ")");
         txn.commit();
-        conn.disconnect();
+        //conn.disconnect();
     }
 
     std::string task::parse_task() {
-        std::ifstream file(std::filesystem::path(path) / (title + ".md")); //todo: сделать абсолютный путь
-        //std::ifstream file(title + ".md"); //работает и считывает содержимое файла, но только если в clion указать текущую директорию как рабочую
+        std::ifstream file(std::filesystem::path(path) / (title + ".md"));
         std::string file_content;
         if (file.is_open()) {
             std::string line;
@@ -54,6 +47,7 @@ namespace ax {
         return file_content;
     }
 
+    //функции для отладки (вывод данных о заданиях и принадлежащих им файлах)
     void task::get_task_files() const {
         pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
         pqxx::work txn(conn);
@@ -85,7 +79,7 @@ namespace ax {
             std::cout << "____________________________________________________" << std::endl;
         }
         txn.commit();
-        conn.disconnect();
+        //conn.disconnect();
     }
 
     int task::get_id() const {
@@ -155,18 +149,12 @@ namespace ax {
         pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
         pqxx::work txn(conn);
 
-        std::string query = "UPDATE ax_task SET page_id=$1, type=$2, title=$3, description=$4, max_mark=$5, status=$6 WHERE id=$7";
-        pqxx::result r = txn.parameterized(query)
-                            (page_id)
-                            (type)
-                            (title)
-                            (description)
-                            (max_mark)
-                            (status)
-                            (id)
-                            .exec();
+        pqxx::result r = txn.exec("UPDATE ax_task SET page_id=" + txn.quote(page_id) + ", type=" + txn.quote(type) +
+                                 ", title=" + txn.quote(title) + ", description=" + txn.quote(description) +
+                                 ", max_mark=" + txn.quote(max_mark) + ", status=" + txn.quote(status) +
+                                 " WHERE id=" + txn.quote(id));
 
         txn.commit();
-        conn.disconnect();
+        //conn.disconnect();
     }
 } // ax

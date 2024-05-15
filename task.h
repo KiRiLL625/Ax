@@ -18,14 +18,14 @@ namespace ax {
         std::string description;
         std::string max_mark;
         int status;
-        std::string path;
+        std::string path; //путь к файлу с заданием
     public:
         task() = delete;
         task(int page_id, int type, std::string title, std::string max_mark,
              int status, std::string path);
         std::string parse_task();
-        void add_query_task();
-        void add_file(const file& f) const;
+        void add_query_task(); //функция для добавления задания в БД
+        void add_file(const file& f) const; //функция для привязки файла к заданию (запись в ax_task_files)
         //unused + debug
         void get_task_files() const;
         int get_id() const;
@@ -42,7 +42,8 @@ namespace ax {
         void set_description(std::string description);
         void set_max_mark(std::string max_mark);
         void set_status(int status);
-        void update_task();
+        void update_task(); //функция для обновления задания в БД (на случай если нужно изменить
+        //уже существующее задание)
     };
 
 } // ax

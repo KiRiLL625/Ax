@@ -21,7 +21,7 @@ namespace ax {
                                   ", " + txn.quote(visibility) + ") RETURNING id");
         this->id = r[0][0].as<int>();
         txn.commit();
-        c.disconnect();
+        //c.disconnect();
     }
 
     std::string file::parse_file() {
@@ -110,7 +110,7 @@ namespace ax {
                                   ", status = " + txn.quote(status) + ", visibility = " + txn.quote(visibility) + " WHERE id = " +
                                   txn.quote(id));
         txn.commit();
-        c.disconnect();
+        //c.disconnect();
     }
 
 } // ax

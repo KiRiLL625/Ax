@@ -10,6 +10,9 @@ namespace ax {
     tasks_parser::tasks_parser(std::string path): path(std::move(path)) {}
 
     void tasks_parser::parse_files() {
+        if(!std::filesystem::exists(path)){
+            throw std::runtime_error("Path does not exist");
+        }
         for (const auto & entry : std::filesystem::directory_iterator(path)) {
             if (entry.path().extension() == ".md") {
                 const auto & it = std::find_if(

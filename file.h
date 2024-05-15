@@ -19,12 +19,12 @@ namespace ax {
         std::string full_text;
         int status;
         int visibility;
-        std::string path;
+        std::string path; //путь к файлу
     public:
         file() = delete;
         file(int type, std::string file_name, std::string download_url,
              int status, int visibility, std::string path);
-        void add_query_file();
+        void add_query_file(); //функция для добавления файла в БД
         int get_id() const;
         int get_type() const;
         std::string get_file_name() const;
@@ -40,7 +40,7 @@ namespace ax {
         void set_full_text(std::string full_text);
         void set_status(int status);
         void set_visibility(int visibility);
-        void update_file();
+        void update_file(); //функция для обновления файла в БД (на случай если нужно изменить уже существующую запись в бд)
     };
 
 } // ax
