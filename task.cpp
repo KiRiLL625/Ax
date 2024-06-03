@@ -14,8 +14,8 @@ namespace ax {
                title(std::move(title.substr(0, title.size() - 3))),
                 max_mark(std::move(max_mark)), status(status), path(path) { description = parse_task();}
 
-    void task::add_query_task() {
-        pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432"); //в файл
+    void task::add_query_task(const std::string& db_connection_path) {
+        pqxx::connection conn(db_connection_path); //в файл
         pqxx::work txn(conn);
 
         pqxx::result r = txn.exec("INSERT INTO ax_task VALUES (DEFAULT, " + txn.quote(page_id) + ", " + txn.quote(type) +
@@ -110,43 +110,43 @@ namespace ax {
         return status;
     }
 
-    void task::set_id(int id) {
+    void task::set_id(int id, const std::string& db_connection_path) {
         this->id = id;
-        update_task();
+        update_task(db_connection_path);
     }
 
-    void task::set_page_id(int page_id) {
+    void task::set_page_id(int page_id,  const std::string& db_connection_path) {
         this->page_id = page_id;
-        update_task();
+        update_task(db_connection_path);
     }
 
-    void task::set_type(int type) {
+    void task::set_type(int type, const std::string& db_connection_path) {
         this->type = type;
-        update_task();
+        update_task(db_connection_path);
     }
 
-    void task::set_title(std::string title) {
+    void task::set_title(std::string title, const std::string& db_connection_path) {
         this->title = std::move(title);
-        update_task();
+        update_task(db_connection_path);
     }
 
-    void task::set_description(std::string description) {
+    void task::set_description(std::string description, const std::string& db_connection_path) {
         this->description = std::move(description);
-        update_task();
+        update_task(db_connection_path);
     }
 
-    void task::set_max_mark(std::string max_mark) {
+    void task::set_max_mark(std::string max_mark, const std::string& db_connection_path) {
         this->max_mark = std::move(max_mark);
-        update_task();
+        update_task(db_connection_path);
     }
 
-    void task::set_status(int status) {
+    void task::set_status(int status, const std::string& db_connection_path) {
         this->status = status;
-        update_task();
+        update_task(db_connection_path);
     }
 
-    void task::update_task() {
-        pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
+    void task::update_task(const std::string& db_connection_path) {
+        pqxx::connection conn(db_connection_path);
         pqxx::work txn(conn);
 
         pqxx::result r = txn.exec("UPDATE ax_task SET page_id=" + txn.quote(page_id) + ", type=" + txn.quote(type) +

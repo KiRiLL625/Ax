@@ -13,8 +13,8 @@ namespace ax {
                download_url(std::move(download_url)),
                status(status), visibility(visibility), path(path) {this->full_text = parse_file();}
 
-    void file::add_query_file() {
-        pqxx::connection c("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
+    void file::add_query_file(const std::string& db_connection_path) {
+        pqxx::connection c(db_connection_path);
         pqxx::work txn(c);
         pqxx::result r = txn.exec("INSERT INTO ax_file VALUES (DEFAULT, " + txn.quote(type) + ", " + txn.quote(file_name) +
                                   ", " + txn.quote(download_url) + ", " + txn.quote(full_text) + ", " + txn.quote(status) +
@@ -67,43 +67,43 @@ namespace ax {
         return visibility;
     }
 
-    void file::set_id(int id) {
+    void file::set_id(int id, const std::string& db_connection_path) {
         this->id = id;
-        update_file();
+        update_file(db_connection_path);
     }
 
-    void file::set_type(int type) {
+    void file::set_type(int type, const std::string& db_connection_path) {
         this->type = type;
-        update_file();
+        update_file(db_connection_path);
     }
 
-    void file::set_file_name(std::string file_name) {
+    void file::set_file_name(std::string file_name, const std::string& db_connection_path) {
         this->file_name = std::move(file_name);
-        update_file();
+        update_file(db_connection_path);
     }
 
-    void file::set_download_url(std::string download_url) {
+    void file::set_download_url(std::string download_url, const std::string& db_connection_path) {
         this->download_url = std::move(download_url);
-        update_file();
+        update_file(db_connection_path);
     }
 
-    void file::set_full_text(std::string full_text) {
+    void file::set_full_text(std::string full_text, const std::string& db_connection_path) {
         this->full_text = std::move(full_text);
-        update_file();
+        update_file(db_connection_path);
     }
 
-    void file::set_status(int status) {
+    void file::set_status(int status, const std::string& db_connection_path) {
         this->status = status;
-        update_file();
+        update_file(db_connection_path);
     }
 
-    void file::set_visibility(int visibility) {
+    void file::set_visibility(int visibility, const std::string& db_connection_path) {
         this->visibility = visibility;
-        update_file();
+        update_file(db_connection_path);
     }
 
-    void file::update_file() {
-        pqxx::connection c("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
+    void file::update_file(const std::string& db_connection_path) {
+        pqxx::connection c(db_connection_path);
         pqxx::work txn(c);
         pqxx::result r = txn.exec("UPDATE ax_file SET type = " + txn.quote(type) + ", file_name = " + txn.quote(file_name) +
                                   ", download_url = " + txn.quote(download_url) + ", full_text = " + txn.quote(full_text) +

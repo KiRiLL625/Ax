@@ -1,0 +1,1 @@
+dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432

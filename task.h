@@ -24,7 +24,7 @@ namespace ax {
         task(int page_id, int type, std::string title, std::string max_mark,
              int status, std::string path);
         std::string parse_task();
-        void add_query_task(); //функция для добавления задания в БД
+        void add_query_task(const std::string& db_connection_path); //функция для добавления задания в БД
         void add_file(const file& f) const; //функция для привязки файла к заданию (запись в ax_task_files)
         //unused + debug
         void get_task_files() const;
@@ -35,14 +35,14 @@ namespace ax {
         std::string get_description() const;
         std::string get_max_mark() const;
         int get_status() const;
-        void set_id(int id);
-        void set_page_id(int page_id);
-        void set_type(int type);
-        void set_title(std::string title);
-        void set_description(std::string description);
-        void set_max_mark(std::string max_mark);
-        void set_status(int status);
-        void update_task(); //функция для обновления задания в БД (на случай если нужно изменить
+        void set_id(int id, const std::string& db_connection_path);
+        void set_page_id(int page_id, const std::string& db_connection_path);
+        void set_type(int type, const std::string& db_connection_path);
+        void set_title(std::string title, const std::string& db_connection_path);
+        void set_description(std::string description, const std::string& db_connection_path);
+        void set_max_mark(std::string max_mark, const std::string& db_connection_path);
+        void set_status(int status, const std::string& db_connection_path);
+        void update_task(const std::string& db_connection_path); //функция для обновления задания в БД (на случай если нужно изменить
         //уже существующее задание)
     };
 
