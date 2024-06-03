@@ -15,7 +15,7 @@ namespace ax {
                 max_mark(std::move(max_mark)), status(status), path(path) { description = parse_task();}
 
     void task::add_query_task() {
-        pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432");
+        pqxx::connection conn("dbname=accelerator user=postgres password=postgres hostaddr=127.0.0.1 port=5432"); //в файл
         pqxx::work txn(conn);
 
         pqxx::result r = txn.exec("INSERT INTO ax_task VALUES (DEFAULT, " + txn.quote(page_id) + ", " + txn.quote(type) +

@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
         }
     }
     if(!tasks_no_tests.empty()){
-        std::cout << "\rTasks without tests:\n";
+        std::cout << "\rTasks without tests:                        \n";
         for(const auto & task : tasks_no_tests){
             std::cout << task << std::endl;
         }
